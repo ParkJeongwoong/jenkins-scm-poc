@@ -24,13 +24,13 @@ spec:
     }
 
     stages {
-        stage('Apply NetworkPolicy') {
-            steps {
-                container('kubectl') {
-                    sh 'kubectl apply -n ${K8S_NAMESPACE} -f config/k8s/network-policy.yaml'
-                }
-            }
-        }
+        // stage('Apply NetworkPolicy') {
+        //     steps {
+        //         container('kubectl') {
+        //             sh 'kubectl apply -n ${K8S_NAMESPACE} -f config/k8s/network-policy.yaml'
+        //         }
+        //     }
+        // }
 
         stage('Run Hello Batch') {
             steps {
