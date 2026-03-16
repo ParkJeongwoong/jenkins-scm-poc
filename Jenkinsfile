@@ -1,0 +1,26 @@
+pipeline {
+    agent any
+
+    environment {
+        K8S_NAMESPACE = 'default'
+    }
+
+    stages {
+        stage('Apply NetworkPolicy') {
+            steps {
+                sh 'kubectl apply -n ${K8S_NAMESPACE} -f config/k8s/network-policy.yaml'
+            }
+        }
+
+        stage('Run Hello Batch') {
+            steps {
+                sh '''
+                    kubectl delete job hello-batch -n ${K8S_NAMESPACE} --ignore-not-found
+                    kubectl apply -n ${K8S_NAMESPACE} -f config/k8s/hello-batch-job.yaml
+                    kubectl wait -n ${K8S_NAMESPACE} --for=condition=complete job/hello-batch --timeout=120s
+                    kubectl logs -n ${K8S_NAMESPACE} job/hello-batch
+                '''
+            }
+        }
+    }
+}
