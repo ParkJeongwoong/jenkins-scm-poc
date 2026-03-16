@@ -29,38 +29,38 @@ spec:
 
 
     stages {
-        stage('Debug') {
+        // stage('Debug') {
+        //     steps {
+        //         sh '''
+        //             set -euxo pipefail
+        //             echo "START"
+        //             which kubectl
+        //             kubectl version --client
+        //             kubectl get ns --request-timeout=5s
+        //             kubectl auth can-i create jobs.batch -n ${K8S_NAMESPACE}
+        //             echo "END"
+        //         '''
+        //     }
+        // }
+        stage('Apply NetworkPolicy') {
             steps {
-                sh '''
-                    set -euxo pipefail
-                    echo "START"
-                    which kubectl
-                    kubectl version --client
-                    kubectl get ns --request-timeout=5s
-                    kubectl auth can-i create jobs.batch -n ${K8S_NAMESPACE}
-                    echo "END"
-                '''
+                container('kubectl') {
+                    sh 'kubectl apply -n ${K8S_NAMESPACE} -f config/k8s/network-policy.yaml'
+                }
             }
         }
-        // stage('Apply NetworkPolicy') {
-        //     steps {
-        //         container('kubectl') {
-        //             sh 'kubectl apply -n ${K8S_NAMESPACE} -f config/k8s/network-policy.yaml'
-        //         }
-        //     }
-        // }
 
-        // stage('Run Hello Batch') {
-        //     steps {
-        //         container('kubectl') {
-        //             sh '''
-        //                 kubectl delete job hello-batch -n ${K8S_NAMESPACE} --ignore-not-found
-        //                 kubectl apply -n ${K8S_NAMESPACE} -f config/k8s/hello-batch-job.yaml
-        //                 kubectl wait -n ${K8S_NAMESPACE} --for=condition=complete job/hello-batch --timeout=120s
-        //                 kubectl logs -n ${K8S_NAMESPACE} job/hello-batch
-        //             '''
-        //         }
-        //     }
-        // }
+        stage('Run Hello Batch') {
+            steps {
+                container('kubectl') {
+                    sh '''
+                        kubectl delete job hello-batch -n ${K8S_NAMESPACE} --ignore-not-found
+                        kubectl apply -n ${K8S_NAMESPACE} -f config/k8s/hello-batch-job.yaml
+                        kubectl wait -n ${K8S_NAMESPACE} --for=condition=complete job/hello-batch --timeout=120s
+                        kubectl logs -n ${K8S_NAMESPACE} job/hello-batch
+                    '''
+                }
+            }
+        }
     }
 }
