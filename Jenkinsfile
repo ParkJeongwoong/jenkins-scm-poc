@@ -9,7 +9,7 @@ spec:
   serviceAccountName: jenkins
   containers:
     - name: kubectl
-      image: bitnami/kubectl:1.32.2
+      image: bitnami/kubectl:latest
       command:
         - /bin/sh
         - -c
