@@ -20,7 +20,7 @@ spec:
     }
 
     environment {
-        K8S_NAMESPACE = 'default'
+        K8S_NAMESPACE = 'jenkins'
     }
 
     stages {
