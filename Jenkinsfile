@@ -7,6 +7,10 @@ apiVersion: v1
 kind: Pod
 spec:
   serviceAccountName: jenkins
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1000
+    fsGroup: 1000
   containers:
     - name: kubectl
       image: bitnami/kubectl:latest
