@@ -29,19 +29,6 @@ spec:
 
 
     stages {
-        // stage('Debug') {
-        //     steps {
-        //         sh '''
-        //             set -euxo pipefail
-        //             echo "START"
-        //             which kubectl
-        //             kubectl version --client
-        //             kubectl get ns --request-timeout=5s
-        //             kubectl auth can-i create jobs.batch -n ${K8S_NAMESPACE}
-        //             echo "END"
-        //         '''
-        //     }
-        // }
         stage('Apply NetworkPolicy') {
             steps {
                 container('kubectl') {
